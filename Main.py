@@ -81,7 +81,7 @@ def BuscarRut(Codigo):
     return Nombre
 
 #Mostramos los datos del producto buscado
-def CalcularPeso(Codigo):
+def CalcularPeso(Codigo,validacion):
     VPERSONA=[]
     for VPERSONA in ListaPersona:
         if VPERSONA[0]==Codigo:
@@ -108,13 +108,15 @@ def CalcularPeso(Codigo):
             print("Fisico: ",VPERSONA[5])
             print("IMC: ",VPERSONA[10])
             print("Interpretacion: ",VPERSONA[11])
-        else:
-            print("no se encontro a la persona buscada")
+            validacion = False
+            return validacion
+
+    print("El Rut Ingresado no esta Registrado")
 
 
 
 #Mostramos los datos del producto buscado
-def BuscarPaciente(Codigo):
+def BuscarPaciente(Codigo,validacion):
     VPERSONA=[]
     for VPERSONA in ListaPersona:
         if VPERSONA[0]==Codigo:
@@ -130,6 +132,8 @@ def BuscarPaciente(Codigo):
                 print("Altura: ",VPERSONA[9])
                 print("IMC: ",VPERSONA[10])
                 print("Interoretacion: ",VPERSONA[11])
+                validacion = False
+                return validacion
             else:
                 print("Rut: ",VPERSONA[0])
                 print("Nombre: ",VPERSONA[1])
@@ -137,8 +141,10 @@ def BuscarPaciente(Codigo):
                 print("edad: ",VPERSONA[3])
                 print("Sexo: ",VPERSONA[4])
                 print("Fisico: ",VPERSONA[5])
-        else:
-            print("no se encontro a la persona buscada")
+                validacion = False
+                return validacion
+
+    print("El Rut Ingresado no esta Registrado")
 
  
  
@@ -183,7 +189,7 @@ while True:
     print('****** Menú Principal ******')
     print('0. SALIR')
     print('1. INGRESAR PERSONA')
-    print('2. CALCULAR PESO')
+    print('2. CALCULAR IMC')
     print('3. BUSQUEDA PERSONA')
     opcion=input('Digitar una Opción: ')
     if opcion=='0':
@@ -191,21 +197,33 @@ while True:
     elif opcion=='1':
         Ingreso()
     elif opcion=='2':
+        valida_op_2 = True
         print('')
-        print('****** CALCULAR PESO ******')
-        Rut=input("Ingrese el rut de la persona: ")
-        try:
-            CalcularPeso(Rut)
-        except:
-            print("\n *no se encontro a la persona Buscada*")
+        print('****** CALCULAR IMC ******')
+        while valida_op_2:
+            print("ingresar 0 para volver al menu principal")
+            Rut=input("Ingrese el rut de la persona: ")
+            if Rut ==  "0":
+                valida_op_2 = False
+            else:
+                if valida_rut(Rut):
+                    BuscarPaciente(Rut,valida_op_2)
+                else:
+                    print("Dato ingresado no es valido como Rut")
 
     elif opcion=='3':
+        valida_op_3 = True
         print('')
         print('****** BUSQUEDA DE PERSONA ******')
-        Rut=input("Ingrese el rut de la persona: ")
-        try:
-            BuscarPaciente(Rut)
-        except:
-            print("\n *no se encontro a la persona Buscada*")
+        while valida_op_3:
+            print("ingresar 0 para volver al menu principal")
+            Rut=input("Ingrese el rut de la persona: ")
+            if Rut ==  "0":
+                valida_op_3 = False
+            else:
+                if valida_rut(Rut):
+                    BuscarPaciente(Rut,valida_op_3)
+                else:
+                    print("Dato ingresado no es valido como Rut")
     else:
         print('*Opción no válida*')
