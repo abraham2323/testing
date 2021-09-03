@@ -47,20 +47,35 @@ def edad(naci):
 
 #esta formula le da la interpretacion segun el peso altura
 
-def IMC(formula):
+def IMC(formula,sexo):
     estado = ""
-    if formula < 20:
-        estado = "Bajo Peso"
-    elif formula >= 20 and formula <= 24.9:
-        estado = "Normal" 
-    elif formula > 25 and formula <= 29.9:
-        estado = "Obecidad Leve"
-    elif formula > 40:
-        estado = "Obesidad Severa"
+    if sexo == 'H':
+        if formula < 20:
+            estado = "Bajo Peso"
+        elif formula >= 20 and formula <= 24.9:
+            estado = "Normal" 
+        elif formula > 25 and formula <= 29.9:
+            estado = "Obecidad Leve"
+        elif formula > 30 and formula <= 40:
+            estado = "Obesidad Severa"
+        else:
+            estado = "Obesidad Muy Severa"
+        return estado
+    elif sexo == 'M':
+        if formula < 20:
+            estado = "Bajo Peso"
+        elif formula >= 20 and formula <= 23.9:
+            estado = "Normal" 
+        elif formula > 24 and formula <= 28.9:
+            estado = "Obecidad Leve"
+        elif formula > 29 and formula <= 37:
+            estado = "Obesidad Severa"
+        else:
+            estado = "Obesidad Muy Severa"
+        return estado
     else:
         print("hubo un error al calculart el IMC")
-    return estado
-
+    
 
 #usamos para ver si el vector se encuentra vacío o lleno
 def Buscar(Codigo):
@@ -73,15 +88,29 @@ def BuscarRut(Codigo):
     if Posicion==0:
         Nombre=''
     else:
-        for VectorProducto in ListaPersona:
-            if VectorProducto[0]==Codigo:
-                Nombre=VectorProducto[0]
+        for VectorPersona in ListaPersona:
+            if VectorPersona[0]==Codigo:
+                Nombre=VectorPersona[0]
             else:
                 Nombre=''
     return Nombre
 
+
+
 #Mostramos los datos del producto buscado
-def CalcularPeso(Codigo,validacion):
+def BuscarPaciente(Codigo):
+    VPERSONA=[]
+    for VPERSONA in ListaPersona:
+        if VPERSONA[0]==Codigo:
+            print("Rut: ",VPERSONA[0])
+            print("Nombre: ",VPERSONA[1])
+            print("fecha de nacimiento: ",VPERSONA[2])
+            print("edad: ",VPERSONA[3])
+            print("Sexo: ",VPERSONA[4])
+            print("Fisico: ",VPERSONA[5])
+
+#Mostramos los datos del Persona buscada
+def CalcularPeso(Codigo):
     VPERSONA=[]
     for VPERSONA in ListaPersona:
         if VPERSONA[0]==Codigo:
@@ -92,64 +121,20 @@ def CalcularPeso(Codigo,validacion):
             peso = float(input("ingrese el peso en Kg :"))
             altura = float(input("ingrese la altura del Paciente en M :"))
             formula = peso/(altura*altura)
-            IMC_pac = IMC(formula)
-            VPERSONA[6] = True
-            VectorPersona.append(Fecha_pes)
-            VectorPersona.append(peso)
-            VectorPersona.append(altura)
-            VectorPersona.append(formula)
-            VectorPersona.append(IMC_pac)
-            
+            IMC_pac = IMC(formula,VPERSONA[4])
             print("Rut: ",VPERSONA[0])
             print("Nombre: ",VPERSONA[1])
             print("fecha de nacimiento: ",VPERSONA[2])
             print("edad: ",VPERSONA[3])
             print("Sexo: ",VPERSONA[4])
             print("Fisico: ",VPERSONA[5])
-            print("IMC: ",VPERSONA[10])
-            print("Interpretacion: ",VPERSONA[11])
-            validacion = False
-            return validacion
-
-    print("El Rut Ingresado no esta Registrado")
+            print("IMC: ",formula)
+            print("Interpretacion: ",IMC_pac)
 
 
-
-#Mostramos los datos del producto buscado
-def BuscarPaciente(Codigo,validacion):
-    VPERSONA=[]
-    for VPERSONA in ListaPersona:
-        if VPERSONA[0]==Codigo:
-            if VPERSONA[6] == True:
-                print("Rut: ",VPERSONA[0])
-                print("Nombre: ",VPERSONA[1])
-                print("fecha de nacimiento: ",VPERSONA[2])
-                print("edad: ",VPERSONA[3])
-                print("Sexo: ",VPERSONA[4])
-                print("Fisico: ",VPERSONA[5])
-                print("fecha pesage: ",VPERSONA[7])
-                print("peso: ",VPERSONA[8])
-                print("Altura: ",VPERSONA[9])
-                print("IMC: ",VPERSONA[10])
-                print("Interoretacion: ",VPERSONA[11])
-                validacion = False
-                return validacion
-            else:
-                print("Rut: ",VPERSONA[0])
-                print("Nombre: ",VPERSONA[1])
-                print("fecha de nacimiento: ",VPERSONA[2])
-                print("edad: ",VPERSONA[3])
-                print("Sexo: ",VPERSONA[4])
-                print("Fisico: ",VPERSONA[5])
-                validacion = False
-                return validacion
-
-    print("El Rut Ingresado no esta Registrado")
-
- 
- 
-#Realizamos el Ingreso de Producto
+#Realizamos el Ingreso de la Persona
 def Ingreso():
+    VectorPersona = []
     print('')
     print('****** INGRESO PERSONA ******')
     dia_nac = int(input("ingrese dia de nacimiento :"))
@@ -166,14 +151,12 @@ def Ingreso():
                 sexo=input("Ingrese el sexo del Paciente: ")
                 print("Deportista = D Persona Normal = N ")
                 Fisico=input("Ingrese el estado del paciente: ")
-                calculado = False
                 VectorPersona.append(Rut)
                 VectorPersona.append(Nombre)
                 VectorPersona.append(Fecha_nac)
                 VectorPersona.append(age)
                 VectorPersona.append(sexo.upper())
                 VectorPersona.append(Fisico.upper())
-                VectorPersona.append(calculado)
                 ListaPersona.append(VectorPersona)
             else:
                 print("\n *El rut ya existe*")
@@ -183,35 +166,38 @@ def Ingreso():
         print("\n *La edad no es valida para el calculo*")
 
 
+def menu_2(Codigo,validacion):
+    while validacion == True:
+        print(' ')
+        print('****** Menú IMC ******')
+        print('0. Volver al Menu Principal')
+        print('1. CALCULAR IMC')
+        print('2. mostrar Usuario')
+        opcion=input('Digitar una Opción: ')
+        if opcion=='0':
+            validacion = False
+            return validacion
+        elif opcion=='1':
+            CalcularPeso(Codigo)
+        elif opcion=='2':
+            BuscarPaciente(Codigo)
+        else:
+            print('*Opción no válida*')
+
 # Menú Principal
 while True:
     print(' ')
     print('****** Menú Principal ******')
     print('0. SALIR')
     print('1. INGRESAR PERSONA')
-    print('2. CALCULAR IMC')
-    print('3. BUSQUEDA PERSONA')
+    print('2. BUSQUEDA PERSONA')
     opcion=input('Digitar una Opción: ')
     if opcion=='0':
         break
     elif opcion=='1':
         Ingreso()
-    elif opcion=='2':
-        valida_op_2 = True
-        print('')
-        print('****** CALCULAR IMC ******')
-        while valida_op_2:
-            print("ingresar 0 para volver al menu principal")
-            Rut=input("Ingrese el rut de la persona: ")
-            if Rut ==  "0":
-                valida_op_2 = False
-            else:
-                if valida_rut(Rut):
-                    BuscarPaciente(Rut,valida_op_2)
-                else:
-                    print("Dato ingresado no es valido como Rut")
 
-    elif opcion=='3':
+    elif opcion=='2':
         valida_op_3 = True
         print('')
         print('****** BUSQUEDA DE PERSONA ******')
@@ -222,7 +208,8 @@ while True:
                 valida_op_3 = False
             else:
                 if valida_rut(Rut):
-                    BuscarPaciente(Rut,valida_op_3)
+                    menu_2(Rut,valida_op_3)
+                    break
                 else:
                     print("Dato ingresado no es valido como Rut")
     else:
